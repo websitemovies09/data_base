@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th10 02, 2024 lúc 05:22 AM
+-- Thời gian đã tạo: Th10 03, 2024 lúc 11:29 PM
 -- Phiên bản máy phục vụ: 10.6.19-MariaDB-cll-lve
 -- Phiên bản PHP: 8.1.28
 
@@ -9457,6 +9457,28 @@ CREATE TABLE `tags` (
   `title` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` text NOT NULL,
+  `email` text NOT NULL,
+  `password` text NOT NULL,
+  `role` varchar(255) NOT NULL DEFAULT 'user'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
+(2, 'admin', 'websitemovies09@gmail.com', '$2b$10$LFgsPwPRCEerixCbnCRpQehelnnNQsTGWoFLQwJA1AXaudi4/TbYC', 'admin'),
+(3, 'kienpro674', 'websitemovies08@gmail.com', '$2b$10$8XFePNJra4IQjDesKzK1.enfd4CaDtFxRdO1lT2YQLcyA2uJHkFiS', 'user');
+
 --
 -- Chỉ mục cho các bảng đã đổ
 --
@@ -9493,6 +9515,12 @@ ALTER TABLE `tags`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Chỉ mục cho bảng `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
 
@@ -9525,6 +9553,12 @@ ALTER TABLE `movies`
 --
 ALTER TABLE `tags`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
