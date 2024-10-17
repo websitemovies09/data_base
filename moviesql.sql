@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 17, 2024 lúc 06:51 AM
+-- Thời gian đã tạo: Th10 17, 2024 lúc 06:55 AM
 -- Phiên bản máy phục vụ: 10.4.27-MariaDB
 -- Phiên bản PHP: 8.2.0
 
@@ -20,6 +20,177 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `nextjs_xxx`
 --
+
+DELIMITER $$
+--
+-- Các hàm
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `create_slug` (`title` VARCHAR(255)) RETURNS VARCHAR(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci  BEGIN
+    DECLARE slug VARCHAR(255);
+    
+    -- Bước 1: Thay thế các ký tự có dấu
+    SET slug = LOWER(title);
+    
+    SET slug = REPLACE(slug, 'à', 'a');
+    SET slug = REPLACE(slug, 'á', 'a');
+    SET slug = REPLACE(slug, 'ạ', 'a');
+    SET slug = REPLACE(slug, 'ả', 'a');
+    SET slug = REPLACE(slug, 'ã', 'a');
+    SET slug = REPLACE(slug, 'â', 'a');
+    SET slug = REPLACE(slug, 'ầ', 'a');
+    SET slug = REPLACE(slug, 'ấ', 'a');
+    SET slug = REPLACE(slug, 'ậ', 'a');
+    SET slug = REPLACE(slug, 'ẩ', 'a');
+    SET slug = REPLACE(slug, 'ẫ', 'a');
+    
+    SET slug = REPLACE(slug, 'è', 'e');
+    SET slug = REPLACE(slug, 'é', 'e');
+    SET slug = REPLACE(slug, 'ẹ', 'e');
+    SET slug = REPLACE(slug, 'ẻ', 'e');
+    SET slug = REPLACE(slug, 'ẽ', 'e');
+    SET slug = REPLACE(slug, 'ê', 'e');
+    SET slug = REPLACE(slug, 'ề', 'e');
+    SET slug = REPLACE(slug, 'ế', 'e');
+    SET slug = REPLACE(slug, 'ệ', 'e');
+    SET slug = REPLACE(slug, 'ể', 'e');
+    SET slug = REPLACE(slug, 'ễ', 'e');
+    
+    SET slug = REPLACE(slug, 'ì', 'i');
+    SET slug = REPLACE(slug, 'í', 'i');
+    SET slug = REPLACE(slug, 'ị', 'i');
+    SET slug = REPLACE(slug, 'ỉ', 'i');
+    SET slug = REPLACE(slug, 'ĩ', 'i');
+    
+    SET slug = REPLACE(slug, 'ò', 'o');
+    SET slug = REPLACE(slug, 'ó', 'o');
+    SET slug = REPLACE(slug, 'ọ', 'o');
+    SET slug = REPLACE(slug, 'ỏ', 'o');
+    SET slug = REPLACE(slug, 'õ', 'o');
+    SET slug = REPLACE(slug, 'ô', 'o');
+    SET slug = REPLACE(slug, 'ồ', 'o');
+    SET slug = REPLACE(slug, 'ố', 'o');
+    SET slug = REPLACE(slug, 'ộ', 'o');
+    SET slug = REPLACE(slug, 'ổ', 'o');
+    SET slug = REPLACE(slug, 'ỗ', 'o');
+    
+    SET slug = REPLACE(slug, 'ơ', 'o');
+    SET slug = REPLACE(slug, 'ờ', 'o');
+    SET slug = REPLACE(slug, 'ớ', 'o');
+    SET slug = REPLACE(slug, 'ợ', 'o');
+    SET slug = REPLACE(slug, 'ở', 'o');
+    SET slug = REPLACE(slug, 'ỡ', 'o');
+    
+    SET slug = REPLACE(slug, 'ù', 'u');
+    SET slug = REPLACE(slug, 'ú', 'u');
+    SET slug = REPLACE(slug, 'ụ', 'u');
+    SET slug = REPLACE(slug, 'ủ', 'u');
+    SET slug = REPLACE(slug, 'ũ', 'u');
+    SET slug = REPLACE(slug, 'ư', 'u');
+    SET slug = REPLACE(slug, 'ừ', 'u');
+    SET slug = REPLACE(slug, 'ứ', 'u');
+    SET slug = REPLACE(slug, 'ự', 'u');
+    SET slug = REPLACE(slug, 'ử', 'u');
+    SET slug = REPLACE(slug, 'ữ', 'u');
+    
+    SET slug = REPLACE(slug, 'đ', 'd');
+    
+    -- Bước 2: Thay khoảng trắng bằng dấu gạch ngang
+    SET slug = REPLACE(slug, ' ', '-');
+
+    -- Bước 3: Loại bỏ các ký tự không phải chữ cái và số
+    SET slug = REGEXP_REPLACE(slug, '[^a-z0-9\-]', '');
+
+    -- Bước 4: Loại bỏ dấu gạch ngang liên tiếp
+    SET slug = REPLACE(slug, '--', '-');
+
+    -- Bước 5: Loại bỏ dấu gạch ngang ở đầu và cuối
+    SET slug = TRIM(BOTH '-' FROM slug);
+
+    RETURN slug;
+END$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `actors`
+--
+
+CREATE TABLE `actors` (
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `actors`
+--
+
+INSERT INTO `actors` (`id`, `name`) VALUES
+(1, 'acror 1');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `caterogys`
+--
+
+CREATE TABLE `caterogys` (
+  `id` int(11) NOT NULL,
+  `title` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `caterogys`
+--
+
+INSERT INTO `caterogys` (`id`, `title`) VALUES
+(1, 'Việt Nam'),
+(2, 'China AV'),
+(4, 'JAV'),
+(5, 'Không che'),
+(6, 'Âu mỹ'),
+(7, 'Uncensored Leaked'),
+(8, 'Thailan');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `max_online_users`
+--
+
+CREATE TABLE `max_online_users` (
+  `id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `max_online_count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `max_online_users`
+--
+
+INSERT INTO `max_online_users` (`id`, `date`, `max_online_count`) VALUES
+(1, '2024-09-28', 51),
+(2, '2024-09-27', 152),
+(3, '2024-09-29', 2),
+(4, '2024-09-30', 3),
+(5, '2024-10-01', 3),
+(6, '2024-10-02', 3),
+(7, '2024-10-04', 4),
+(8, '2024-10-05', 3),
+(9, '2024-10-06', 4),
+(10, '2024-10-07', 4),
+(11, '2024-10-08', 3),
+(12, '2024-10-09', 3),
+(13, '2024-10-10', 5),
+(14, '2024-10-10', 5),
+(15, '2024-10-11', 6),
+(16, '2024-10-12', 1),
+(17, '2024-10-13', 2),
+(18, '2024-10-14', 2),
+(19, '2024-10-15', 1),
+(20, '2024-10-16', 1),
+(21, '2024-10-17', 1);
 
 -- --------------------------------------------------------
 
@@ -9442,9 +9613,60 @@ INSERT INTO `movies` (`id`, `title`, `thumbnail`, `video`, `actor_id`, `views`, 
 (9411, 'Móc bướm bằng 1 ngón em đã bắn nước ướt cả tay ', 'https://media.discordapp.net/attachments/1291952724505792514/1295593659026374686/57khax3ufxlh-256x144.jpg?ex=670f371f&is=670de59f&hm=85944f4f48b69cc6d4e57e42c8c0a6a90a83866cef19668547ade23a5c61dd07&=&format=webp', 'https://helvid.net/play/index/3c3b2d9caf9a', NULL, 61, 'helvid', 2, 1, NULL, '2024-10-15 03:47:13', 'moc-buom-bng-1-ngon-em-da-bn-nuoc-uot-ca-tay'),
 (9412, 'Đưa em người yêu đi nhậu rồi cho hội bạn thân thay nhau xả tinh', 'https://media.discordapp.net/attachments/1291952724505792514/1295594434813104168/Dua-em-nguoi-yeu-di-nhau-roi-cho-hoi-ban-than-xa-do.webp?ex=670f37d8&is=670de658&hm=f0c39ce8cfa560770e092e4d96b49879df6f255ffcdb6c6a6d0a1a418d9b0a57&=&format=webp', 'https://helvid.net/play/index/768a9961fe81', NULL, 50, 'helvid', 1, 1, NULL, '2024-10-15 03:51:07', 'dua-em-nguoi-yeu-di-nhau-roi-cho-hoi-ban-than-thay-nhau-xa-tinh');
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `tags`
+--
+
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL,
+  `title` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` text NOT NULL,
+  `email` text NOT NULL,
+  `password` text NOT NULL,
+  `role` varchar(255) NOT NULL DEFAULT 'user'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
+(2, 'admin', 'websitemovies09@gmail.com', '$2b$10$LFgsPwPRCEerixCbnCRpQehelnnNQsTGWoFLQwJA1AXaudi4/TbYC', 'admin'),
+(3, 'kienpro674', 'websitemovies08@gmail.com', '$2b$10$8XFePNJra4IQjDesKzK1.enfd4CaDtFxRdO1lT2YQLcyA2uJHkFiS', 'user');
+
 --
 -- Chỉ mục cho các bảng đã đổ
 --
+
+--
+-- Chỉ mục cho bảng `actors`
+--
+ALTER TABLE `actors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `caterogys`
+--
+ALTER TABLE `caterogys`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `max_online_users`
+--
+ALTER TABLE `max_online_users`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `movies`
@@ -9454,14 +9676,56 @@ ALTER TABLE `movies`
   ADD KEY `movies_ibfk_1` (`caterogy_id`);
 
 --
+-- Chỉ mục cho bảng `tags`
+--
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
+
+--
+-- AUTO_INCREMENT cho bảng `actors`
+--
+ALTER TABLE `actors`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT cho bảng `caterogys`
+--
+ALTER TABLE `caterogys`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT cho bảng `max_online_users`
+--
+ALTER TABLE `max_online_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT cho bảng `movies`
 --
 ALTER TABLE `movies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9415;
+
+--
+-- AUTO_INCREMENT cho bảng `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
